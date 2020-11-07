@@ -36,4 +36,4 @@
         url = "http://active.vault.service.dc1.consul:8200"
     [http.services.nomad.loadBalancer]
       [[http.services.nomad.loadBalancer.servers]]
-        url = "http://nomad.service.dc1.consul:4646"
+        url = "http://nomad.service.global.consul:4646"
