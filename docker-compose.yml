@@ -5,6 +5,7 @@ services:
     image: "traefik:v2.3.2"
     command:
       - --providers.file.directory=/etc/traefik
+      - --providers.file.watch=true
       - --providers.consulcatalog=true
       - --providers.consulcatalog.exposedbydefault=false
       - --providers.consulcatalog.endpoint.address=169.254.32.1:8500
