@@ -22,6 +22,10 @@
       service = "vault"
       entrypoints = ["https"]
       rule = "HostRegexp(`vault.{domain:.+}`)"
+    [http.routers.nomad]
+      service = "nomad"
+      entrypoints = ["https"]
+      rule = "HostRegexp(`nomad.{domain:.+}`)"
 
   [http.services]
     [http.services.consul.loadBalancer]
@@ -30,3 +34,6 @@
     [http.services.vault.loadBalancer]
       [[http.services.vault.loadBalancer.servers]]
         url = "http://active.vault.service.dc1.consul:8200"
+    [http.services.nomad.loadBalancer]
+      [[http.services.nomad.loadBalancer.servers]]
+        url = "http://active.nomad.service.dc1.consul:4646"
