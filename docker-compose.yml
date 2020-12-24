@@ -8,7 +8,7 @@ services:
       - --providers.file.watch=true
       - --providers.consulcatalog=true
       - --providers.consulcatalog.exposedbydefault=false
-      - --providers.consulcatalog.endpoint.address=169.254.32.1:8500
+      - --providers.consulcatalog.endpoint.address=${CONSUL_IP}:8500
       - --providers.consulcatalog.endpoint.scheme=http
       - --providers.consulcatalog.endpoint.datacenter=dc1
       - --providers.docker=true
@@ -30,8 +30,6 @@ services:
     networks:
       default:
         ipv4_address: ${KITT_NETWORK_PREFIX}.100
-    dns:
-      - 169.254.32.1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./etc/traefik/kitt.toml:/etc/traefik/kitt.toml
