@@ -10,7 +10,7 @@ services:
       - --providers.consulcatalog.exposedbydefault=false
       - --providers.consulcatalog.endpoint.address=${CONSUL_IP}:8500
       - --providers.consulcatalog.endpoint.scheme=http
-      - --providers.consulcatalog.endpoint.datacenter=dc1
+      - --providers.consulcatalog.endpoint.datacenter=${CONSUL_DC}
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.usebindportip=false
