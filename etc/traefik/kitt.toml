@@ -29,4 +29,4 @@
         url = "http://169.254.32.1:8500/"
     [http.services.nomad.loadBalancer]
       [[http.services.nomad.loadBalancer.servers]]
-        url = "http://nomad.service.global.consul:4646"
+        url = "http://169.254.32.1:4646"
