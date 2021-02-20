@@ -6,12 +6,6 @@ menu:
 clean:
 	docker-compose down --remove-orphans
 
-setup:
-	$(MAKE) up
-
-watch:
-	./bin/dns-update
-
 up:
 	docker-compose up -d --remove-orphans
 
@@ -19,5 +13,8 @@ down:
 	docker-compose rm -f -s
 
 recreate:
-	-$(MAKE) clean
+	$(MAKE) clean
 	$(MAKE) up
+
+logs:
+	docker-compose logs -f
