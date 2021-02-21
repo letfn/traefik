@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   traefik:
-    image: "traefik:v2.4.5"
+    image: defn/traefik
     command:
       - --providers.file.directory=/etc/traefik
       - --providers.file.watch=true
@@ -51,7 +51,7 @@ services:
       - 443:443
 
   traefik-forward-auth:
-    image: thomseddon/traefik-forward-auth:2
+    image: defn/traefik-forward-auth
     command: [ "--match-whitelist-or-domain" ]
     environment:
       - DEFAULT_ACTION=auth

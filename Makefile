@@ -3,6 +3,18 @@ SHELL := /bin/bash
 menu:
 	@perl -ne 'printf("%10s: %s\n","$$1","$$2") if m{^([\w+-]+):[^#]+#\s(.+)$$}' Makefile
 
+build: # Build defn/traefik, forward-auth
+	docker build -t defn/traefik .
+	docker build -t defn/traefik-forward-auth -f Dockerfile.auth .
+
+push: # Push defn/traefik, forward-auth
+	docker push defn/traefik
+	docker push defn/traefik-forward-auth
+
+pull : # Pull defn/traefik, forward-auth
+	docker pull defn/traefik
+	docker pull defn/traefik-forward-auth
+
 clean:
 	docker-compose down --remove-orphans
 
