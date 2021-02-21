@@ -14,12 +14,18 @@ services:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.usebindportip=false
+      - --certificatesresolvers.cloudflare.acme.email=kitt@defn.us
+      - --certificatesresolvers.cloudflare.acme.storage=/etc/traefik/certs/acme.json
+      - --certificatesresolvers.cloudflare.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1:53
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
       - --entrypoints.http.address=:80
       - --entrypoints.http.proxyprotocol.insecure
       - --entrypoints.http.http.redirections.entryPoint.to=https
       - --entrypoints.http.http.redirections.entrypoint.permanent=false
       - --entrypoints.https.address=:443
       - --entrypoints.https.http.tls=true
+      - --entrypoints.https.http.tls.certResolver=cloudflare
       - --entrypoints.https.proxyprotocol.insecure
       - --entrypoints.https.http.middlewares=traefik-forward-auth@docker
       - --api.dashboard
@@ -27,13 +33,14 @@ services:
       - --serverstransport.insecureskipverify=true
       - --log.level=INFO
       - --accesslog=true
+    env_file: ./.env
     networks:
       default:
         ipv4_address: ${KITT_NETWORK_PREFIX}.100
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./etc/traefik/kitt.toml:/etc/traefik/kitt.toml
-      - ./etc/traefik/certs:/etc/traefik/certs
+      - ${TRAEFIK_MOUNT}/traefik/kitt.toml:/etc/traefik/kitt.toml
+      - ${TRAEFIK_MOUNT}/traefik/certs:/etc/traefik/certs
     labels:
       - "app=traefik"
       - "zone=kitt"
@@ -53,18 +60,7 @@ services:
   traefik-forward-auth:
     image: defn/traefik-forward-auth
     command: [ "--match-whitelist-or-domain" ]
-    environment:
-      - DEFAULT_ACTION=auth
-      - DEFAULT_PROVIDER=generic-oauth
-      - PROVIDERS_GENERIC_OAUTH_AUTH_URL=https://github.com/login/oauth/authorize
-      - PROVIDERS_GENERIC_OAUTH_TOKEN_URL=https://github.com/login/oauth/access_token
-      - PROVIDERS_GENERIC_OAUTH_USER_URL=https://api.github.com/user
-      - PROVIDERS_GENERIC_OAUTH_CLIENT_ID=${KITT_CLIENT_ID}
-      - PROVIDERS_GENERIC_OAUTH_CLIENT_SECRET=${KITT_CLIENT_SECRET}
-      - SECRET=${KITT_SECRET}
-      - COOKIE_DOMAIN=${KITT_DOMAIN}
-      - AUTH_HOST=auth.${KITT_DOMAIN}
-      - LOG_LEVEL=debug
+    env_file: ./.env.auth
     labels:
       - "zone=kitt"
       - "traefik.enable=true"
