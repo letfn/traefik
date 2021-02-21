@@ -18,15 +18,8 @@
       service = "consul"
       entrypoints = ["https"]
       rule = "HostRegexp(`consul.{domain:.+}`)"
-    [http.routers.nomad]
-      service = "nomad"
-      entrypoints = ["https"]
-      rule = "HostRegexp(`nomad.{domain:.+}`)"
 
   [http.services]
     [http.services.consul.loadBalancer]
       [[http.services.consul.loadBalancer.servers]]
         url = "http://169.254.32.1:8500/"
-    [http.services.nomad.loadBalancer]
-      [[http.services.nomad.loadBalancer.servers]]
-        url = "http://169.254.32.1:4646"
