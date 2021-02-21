@@ -33,7 +33,7 @@ services:
       - --api.dashboard
       - --api
       - --serverstransport.insecureskipverify=true
-      - --log.level=DEBUG
+      - --log.level=ERROR
       - --accesslog=true
     env_file: ./.env
     networks:
