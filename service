@@ -5,7 +5,38 @@ function main {
   source /secrets/.env
   set +a
 
-  exec /entrypoint.sh traefik "$@"
-}
+  exec /entrypoint.sh traefik \
+    --providers.file.directory=/etc/traefik \
+    --providers.file.watch=true \
+    --providers.consulcatalog=true \
+    --providers.consulcatalog.exposedbydefault=false \
+    --providers.consulcatalog.endpoint.address=${CONSUL_IP}:8500 \
+    --providers.consulcatalog.endpoint.scheme=http \
+    --providers.consulcatalog.endpoint.datacenter=${CONSUL_DC} \
+    --providers.docker=true \
+    --providers.docker.exposedbydefault=false \
+    --providers.docker.usebindportip=false \
+    --certificatesresolvers.cloudflare.acme.email=kitt@defn.us \
+    --certificatesresolvers.cloudflare.acme.storage=/etc/traefik/certs/acme.json \
+    --certificatesresolvers.cloudflare.acme.caserver=https://acme-v02.api.letsencrypt.org/directory \
+    --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1:53 \
+    --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare \
+    --entrypoints.http.address=:80 \
+    --entrypoints.http.proxyprotocol.insecure \
+    --entrypoints.http.http.redirections.entryPoint.to=https \
+    --entrypoints.http.http.redirections.entrypoint.permanent=false \
+    --entrypoints.https.address=:443 \
+    --entrypoints.https.http.tls=true \
+    --entrypoints.https.http.tls.certresolver=cloudflare \
+    --entrypoints.https.http.tls.domains[0].main=${KITT_DOMAIN} \
+    --entrypoints.https.http.tls.domains[0].sans=*.${KITT_DOMAIN} \
+    --entrypoints.https.proxyprotocol.insecure \
+    --entrypoints.https.http.middlewares=traefik-forward-auth@docker \
+    --api.dashboard \
+    --api \
+    --serverstransport.insecureskipverify=true \
+    --log.level=ERROR \
+    --accesslog=true "$@" \
+} 
 
 main "$@"

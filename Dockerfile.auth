@@ -6,4 +6,4 @@ COPY service.auth /service
 
 ENTRYPOINT [ "/bin/bash", "/service" ]
 
-CMD []
+CMD [ "--match-whitelist-or-domain" ]
