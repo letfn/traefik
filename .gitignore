@@ -19,3 +19,4 @@ backup
 fixed-cidr-v6
 daemon.json
 mnt
+bash

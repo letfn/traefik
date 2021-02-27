@@ -35,14 +35,14 @@ services:
       - --serverstransport.insecureskipverify=true
       - --log.level=ERROR
       - --accesslog=true
-    env_file: ./.env
     networks:
       default:
         ipv4_address: ${KITT_NETWORK_PREFIX}.100
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${TRAEFIK_MOUNT}/traefik/kitt.toml:/etc/traefik/kitt.toml
-      - ${TRAEFIK_MOUNT}/traefik/certs:/etc/traefik/certs
+      - ${TRAEFIK_MOUNT:-./mnt}/traefik/kitt.toml:/etc/traefik/kitt.toml
+      - ${TRAEFIK_MOUNT:-./mnt}/traefik/certs:/etc/traefik/certs
+      - env_traefik:/secrets
     labels:
       - "app=traefik"
       - "zone=kitt"
@@ -60,9 +60,8 @@ services:
       - 443:443
 
   traefik-forward-auth:
-    image: defn/traefik-forward-auth
+    image: defn/traefik-auth
     command: [ "--match-whitelist-or-domain" ]
-    env_file: ./.env.auth
     labels:
       - "zone=kitt"
       - "traefik.enable=true"
@@ -72,6 +71,8 @@ services:
       - "traefik.http.services.traefik-forward-auth.loadbalancer.server.port=4181"
       - "traefik.http.middlewares.traefik-forward-auth.forwardauth.address=http://traefik-forward-auth:4181"
       - "traefik.http.middlewares.traefik-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
+    volumes:
+      - env_traefik_auth:/secrets
     depends_on:
       - traefik
 
