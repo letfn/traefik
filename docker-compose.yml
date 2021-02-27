@@ -75,6 +75,12 @@ services:
     depends_on:
       - traefik
 
+volumes:
+  env_traefik:
+    external: true
+  env_traefik_auth:
+    external: true
+
 networks:
   default:
     external:

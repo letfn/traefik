@@ -30,3 +30,7 @@ recreate:
 
 logs:
 	docker-compose logs -f
+
+env:
+	docker run --rm -v env_traefik:/secrets alpine cat /secrets/.env > .env
+	docker run --rm -v env_traefik-auth:/secrets alpine cat /secrets/.env > .env.auth
