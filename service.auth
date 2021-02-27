@@ -1,7 +1,6 @@
 #!/bin/bash
 
 function main {
-  set -x
   set -a
   source /secrets/.env
   set +a
