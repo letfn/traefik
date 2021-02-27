@@ -36,7 +36,7 @@ function main {
     --api \
     --serverstransport.insecureskipverify=true \
     --log.level=ERROR \
-    --accesslog=true "$@" \
+    --accesslog=true "$@"
 } 
 
 main "$@"
