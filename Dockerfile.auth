@@ -1,1 +1,9 @@
 FROM thomseddon/traefik-forward-auth:2
+
+COPY bash /bin/bash
+
+COPY service.auth /service
+
+ENTRYPOINT [ "/bin/bash", "/service" ]
+
+CMD [ "--match-whitelist-or-domain" ]
