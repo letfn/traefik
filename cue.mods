@@ -1,0 +1,5 @@
+module gitub.com/letfn/traefik
+
+cue v0.4.0
+
+require github.com/defn/boot v0.0.56

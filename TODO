@@ -1,0 +1,5 @@
+hof mod init cue gitub.com/letfn/traefik
+echo require github.com/defn/boot v0.0.54 >> cue.mods
+hof mod vendor cue
+vi main.cue main_tool.cue
+c config
